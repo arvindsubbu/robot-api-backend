@@ -11,6 +11,11 @@ const asyncHandler = (fn) => (req, res, next) => {
 
 
 /**
+ * POST   /robots
+ * Register robot (returns apiKey)
+ */
+router.post("/", asyncHandler(robotsController.register));
+/**
  * GET    /robots
  * List robots with pagination
  * Query params: ?page=1&limit=20
