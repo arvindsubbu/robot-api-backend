@@ -1,5 +1,6 @@
 const Robot = require("../models/Robot");
 const Log = require("../models/Log");
+const crypto = require("crypto");
 
 /**
  * Register a new robot.
@@ -9,6 +10,7 @@ const Log = require("../models/Log");
 exports.register = async (req, res, next) => {
   try {
     const { id, name, type, status } = req.body;
+    const apiKey = crypto.randomBytes(24).toString("hex"); // 48 hex chars
 
     // Basic validation
     if (!id || !name || !type) {
@@ -28,11 +30,12 @@ exports.register = async (req, res, next) => {
       name,
       type,
       status: status || undefined,
+      apiKey,
     });
 
     return res
       .status(201)
-      .json({ message: "Robot registered successfully", robot });
+      .json({ message: "Robot registered successfully", robot, apiKey});
   } catch (err) {
     next(err); // forwarded to global error handler
   }
