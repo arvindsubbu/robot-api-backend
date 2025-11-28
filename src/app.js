@@ -3,7 +3,7 @@ const cors = require('cors');
 
 const robotsRouter = require('./routes/robots');
 const logsRouter = require('./routes/logs');
-const errorHandler = require('./middlewares/errorHandler');
+const { notFound, errorHandler } = require('./middlewares/errorHandler');
 
 const app = express();
 
@@ -15,6 +15,10 @@ app.use(express.json());
 app.use('/robots', robotsRouter);
 app.use('/robots', logsRouter);
 
+// 404 handler(for unknown routes)
+app.use(notFound);
+
+// Global error handler
 app.use(errorHandler);
 
 module.exports = app;
