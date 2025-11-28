@@ -31,6 +31,11 @@ const RobotSchema = new mongoose.Schema(
       type: Object,          
       default: null,
     },
+    apikey : {
+      type : String,
+      default : null,
+      select : false,
+    }
   },
   {
     timestamps: true,         
