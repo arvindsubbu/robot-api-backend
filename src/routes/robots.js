@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const robotAuth = require("../middlewares/robotAuth");
 
 const robotsController = require('../controllers/robotsController');
 
@@ -26,6 +27,6 @@ router.get("/:id", asyncHandler(robotsController.get));
  * PATCH  /robots/:id/status
  * Update robot status (battery, location, mode, error)
  */
-router.patch("/:id/status", asyncHandler(robotsController.updateStatus));
+router.patch("/:id/status", robotAuth,asyncHandler(robotsController.updateStatus));
 
 module.exports = router;
