@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const robotAuth = require("../middlewares/robotAuth");
 
-const robotsController = require('../controllers/robotsController');
+const robotsController = require("../controllers/robotsController");
 
 // small helper to forward errors to express error handler
 const asyncHandler = (fn) => (req, res, next) => {
