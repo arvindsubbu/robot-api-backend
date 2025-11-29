@@ -133,6 +133,7 @@ exports.updateStatus = async (req, res, next) => {
       message,
       level: error ? "error" : "info",
       meta: { update },
+      source : "robot"
     });
 
     return res.json({ message: "Status updated", robot });
