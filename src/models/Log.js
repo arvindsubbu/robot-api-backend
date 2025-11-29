@@ -22,6 +22,11 @@ const LogSchema = new mongoose.Schema(
       type: Object, // optional extra data (eg:vision result)
       default: null,
     },
+    source : {
+      type : String,
+      enum : ["robot", "manual", "system"],
+      default : "robot",
+    }
   },
   {
     timestamps: { createdAt: true, updatedAt: false } // we only need createdAt for logs
