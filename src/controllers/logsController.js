@@ -24,11 +24,13 @@ exports.createLog = async (req, res, next) => {
     if (source && typeof source === "string") {
       source = source.toLocaleLowerCase();
       if (!allowedSources.has(source)) {
-         return res.status(400).json({ error: "Invalid source value" });
-        }
+        return res.status(400).json({ error: "Invalid source value" });
+      }
     }
     if (source === "robot") {
-      return res.status(403).json({ error: "Direct robot-sourced logs not allowed from clients" });
+      return res
+        .status(403)
+        .json({ error: "Direct robot-sourced logs not allowed from clients" });
     }
     const src = source || "manual";
 
@@ -46,7 +48,7 @@ exports.createLog = async (req, res, next) => {
       message,
       level: lvl,
       meta: metaObj,
-      source : src,
+      source: src,
     });
 
     return res.status(201).json({ message: "Log created", log });
@@ -66,17 +68,27 @@ exports.getLogs = async (req, res, next) => {
     const robot = await Robot.findById(id).lean();
     if (!robot) return res.status(404).json({ error: "Robot not found" });
 
+    // Pagination
+    const page = Math.max(1, parseInt(req.query.page) || 1);
     const limit = Math.min(100, parseInt(req.query.limit) || 20);
+    const skip = (page - 1) * limit;
 
-    const logs = await Log.find({ robotId: id })
-      .sort({ createdAt: -1 })
-      .limit(limit)
-      .lean();
+    // Query logs + total count
+    const [logs, total] = await Promise.all([
+      Log.find({ robotId: id }).sort({ createdAt: -1 }).skip(skip).limit(limit).lean(),
+      Log.countDocuments({ robotId: id }),
+    ]);
 
     return res.json({
-      robotId: id,
-      count: logs.length,
-      logs,
+      meta: {
+         robotId: id,
+         total,
+         page,
+         limit,
+         pages: Math.ceil(total/limit),
+         count: logs.length,
+      },
+      data: logs,    
     });
   } catch (err) {
     next(err);
