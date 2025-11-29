@@ -10,7 +10,7 @@ const allowedLevels = new Set(["info", "warn", "error"]);
 exports.createLog = async (req, res, next) => {
   try {
     const { id } = req.params; // robot id
-    const { message, level, meta, source} = req.body;
+    let { message, level, meta, source } = req.body;
 
     // Validate robot exists
     const robot = await Robot.findById(id).lean();

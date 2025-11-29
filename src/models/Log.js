@@ -24,7 +24,7 @@ const LogSchema = new mongoose.Schema(
     },
     source : {
       type : String,
-      enum : ["robot", "manual", "system"],
+      enum : ["robot", "manual", "system", "operator"],
       default : "robot",
     }
   },
